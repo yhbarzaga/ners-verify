@@ -1,0 +1,51 @@
+version: "3.3"
+services:
+
+  db:
+    image: postgres:12
+    container_name: ners-db
+    volumes:
+      - app-db-data:/var/lib/postgresql/data/pgdata
+    env_file:
+      - .env
+    environment:
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    deploy:
+      placement:
+        constraints:
+          - node.labels.${STACK_NAME?Variable not set}.app-db-data == true
+    ports:
+      - "5434:5432"
+    networks:
+      - api-network
+
+  api:
+    ports:
+      - "8888:8888"
+    container_name: ners-api
+    volumes:
+      - type: bind
+        source: .
+        target: /app
+    env_file:
+      - .env
+    environment:
+      - SERVER_HOST=http://${DOMAIN?Variable not set}
+    depends_on:
+      - db
+    networks:
+      - api-network
+    build:
+      context: .
+      args:
+        INSTALL_DEV: ${INSTALL_DEV-'true'}
+    # command: bash -c "while true; do sleep 1; done" # Infinite loop to keep container live doing nothing
+    command: /start-reload.sh
+
+volumes:
+  app-db-data:
+
+networks:
+  api-network:
+    driver: bridge
+
