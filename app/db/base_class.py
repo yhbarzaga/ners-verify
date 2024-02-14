@@ -5,7 +5,7 @@ from sqlalchemy.ext.declarative import as_declarative
 
 @as_declarative()
 class Base:
-    """Base class for data model."""
+    """Base class for a data model."""
 
     __name__: str
     created_at = Column(DateTime, nullable=False, default=pendulum.now("UTC"))
