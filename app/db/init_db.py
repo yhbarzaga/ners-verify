@@ -9,7 +9,7 @@ from app.db import base  # noqa: F401
 
 
 def init_db(db: Session) -> None:
-    # Tables should be created with Alembic migrations, 
+    # Tables should be created with Alembic migrations,
     # But if you don't want to use migrations, create
     # the tables uncommenting the next line
     # Base.metadata.create_all(bind=engine)
