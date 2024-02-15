@@ -1,0 +1,17 @@
+# Global config
+STACK_NAME: <project_name>
+DOMAIN: localhost
+
+# POSTGRES
+SQLALCHEMY_DATABASE_URI=postgresql://<user>:<password>@<server>:<port>/<db_name>
+POSTGRES_SERVER=<server>
+POSTGRES_USER=<user>
+POSTGRES_DB=<db_name>
+POSTGRES_PASSWORD=<password>
+
+#Verify
+VERIFY_BASE_URL=<url>
+VERIFY_CLIENT_ID=<client_id>
+VERIFY_CLIENT_SECRET=<client_secret>
+VERIFY_API_KEY=<api_key>
+VERIFY_USER_NAME=<user_name>
