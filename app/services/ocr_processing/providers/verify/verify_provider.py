@@ -26,8 +26,8 @@ class VerifyProvider(OCRProvider):
     def _set_headers(self):
         """Set initial headers."""
         return {
-            "CLIENT-ID": self.settings.verify_client_id,
-            "AUTHORIZATION": f"apikey {self.settings.verify_user_name}:{self.settings.verify_api_key}",
+            "CLIENT-ID": self.settings.client_id,
+            "AUTHORIZATION": f"apikey {self.settings.user_name}:{self.settings.api_key}",
         }
 
     def get_document(self, document_id: str) -> DocumentFromProvider:
@@ -58,7 +58,7 @@ class VerifyProvider(OCRProvider):
         try:
             response.raise_for_status()
         except HTTPError as err:
-            details = f"{data['message']} {data['error']}"
+            details = f"{data.get('error')} {data.get('details')}"
             raise OCRDocumentException(
                 detail=details, status_code=response.status_code
             ) from err
