@@ -47,9 +47,6 @@ class VerifyProvider(OCRProvider):
 
         return self._parse_response(document)
 
-    def update_document(self):
-        """Update a processed document trough Verify"""
-
     # noinspection PyMethodMayBeStatic
     def _process_request(self, response):
         """Process response and check for errors."""

@@ -15,8 +15,8 @@ def get_ocr_provider():
     return provider_cls(settings=_get_ocr_provider_settings(provider_id))
 
 
-def _get_ocr_provider_settings(provider_id: int):
+def _get_ocr_provider_settings(key: int):
     """Return OCR provider settings."""
 
-    setting_cls = provider_settings_map[provider_id]
+    setting_cls = provider_settings_map[key]
     return setting_cls()
