@@ -1,3 +1,5 @@
+import math
+
 from app.domain import StaffDomain
 from app.exceptions import ResourceNotFound
 from app.repositories import StaffRepository
@@ -17,11 +19,17 @@ class StaffService:
 
         self.repo = repo
 
-    def get_by_internal_id(self, staff_id: str) -> StaffDomain:
+    def get_by_internal_id(self, internal_id: str) -> StaffDomain:
         """Get the expected staff object from."""
-        staff = self.repo.get_by_internal_id(staff_id)
+        staff = self.repo.get_by_internal_id(internal_id)
 
         if staff is None:
-            raise ResourceNotFound(f"Internal user with id {staff_id} not found")
+            raise ResourceNotFound(f"Internal user with id {internal_id} not found")
 
         return staff
+
+    def get_total(self, internal_id: str):
+        """Get the total amount to be refund"""
+        staff = self.get_by_internal_id(internal_id)
+        total = sum(document.total for document in staff.documents)
+        return math.ceil(total)
