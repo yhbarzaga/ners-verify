@@ -17,6 +17,7 @@ alembic = "^1.13.1"
 httpx = "^0.26.0"
 pendulum = "^3.0.0"
 tenacity = "^8.2.3"
+requests = "^2.31.0"
 
 
 [tool.poetry.group.dev.dependencies]
