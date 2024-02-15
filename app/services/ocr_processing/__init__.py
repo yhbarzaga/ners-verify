@@ -16,8 +16,3 @@ class OCRProvider(metaclass=abc.ABCMeta):
     def process_document(self, document: ProcessDocumentData) -> DocumentFromProvider:
         """Abstract method to process a document"""
         raise NotImplementedError
-
-    @abc.abstractmethod
-    def update_document(self):
-        """Abstract method to update a document"""
-        raise NotImplementedError

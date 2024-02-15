@@ -8,8 +8,8 @@ from app.services.staff_service import StaffService
 router = APIRouter()
 
 
-@router.get("/staff/{staff_id}")
-def process_document(
+@router.get("/staff/{staff_id}/refund")
+def get_total_refund(
     staff_id: str,
     staff_repo=Depends(get_repository(StaffRepository)),
 ):
@@ -19,5 +19,5 @@ def process_document(
         return StaffService(repo=staff_repo).get_total(staff_id)
     except ResourceNotFound as err:
         raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST, detail=str(err)
+            status_code=status.HTTP_404_NOT_FOUND, detail=str(err)
         ) from err
