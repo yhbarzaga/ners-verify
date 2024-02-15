@@ -1,4 +1,4 @@
-from pydantic.v1 import BaseSettings
+from pydantic_settings import BaseSettings
 
 from app.core.config import get_settings
 

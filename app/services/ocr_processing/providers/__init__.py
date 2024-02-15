@@ -3,9 +3,10 @@ from app.services.ocr_processing.providers.verify import VerifyProvider, VerifyS
 
 provider_map = {1: VerifyProvider}
 provider_settings_map = {1: VerifySettings}
+provider_id = 1  # this fixed provider need to be defined in a more dynamic way
 
 
-def get_ocr_provider(provider_id: int = 1):
+def get_ocr_provider():
     """
     Return OCR provider.
     :note: in future this function should be modified to support new providers

@@ -1,8 +1,9 @@
-from sqlalchemy import Column, String, ForeignKey, UUID
+import uuid
+
+from sqlalchemy import Column, String, UUID
 from sqlalchemy.orm import relationship
 
 from app.db.base_class import Base
-from app.domain import constants
 
 
 class Staff(Base):
@@ -10,7 +11,9 @@ class Staff(Base):
 
     __tablename__ = "staff"
 
-    uid: str = Column(UUID(as_uuid=True), primary_key=True, nullable=False)
+    uid: str = Column(
+        UUID(as_uuid=True), primary_key=True, nullable=False, default=uuid.uuid4
+    )
     internal_id: str = Column(
         String(),
         unique=True,
