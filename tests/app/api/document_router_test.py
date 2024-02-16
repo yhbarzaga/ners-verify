@@ -9,6 +9,16 @@ from app.services.ocr_processing import DocumentFromProvider
 class TestDocumentRouter:
     """Tests related to document endpoints"""
 
+    def test_process_document_unauthorized(self, client: TestClient):
+        """Test that if API KEY is not provided forbidden access is returned."""
+
+        response = client.post(
+            "api/v1/documents/",
+            json={},
+        )
+
+        assert response.status_code == status.HTTP_403_FORBIDDEN
+
     def test_process_document_not_found(self, client: TestClient):
         """Test that when process document if staff id provided doesn't exist a NotFound is returned."""
         fake_id = str(uuid.uuid4())
@@ -19,7 +29,11 @@ class TestDocumentRouter:
             "staff_id": fake_id,
         }
 
-        response = client.post("api/v1/documents/", json=payload)
+        response = client.post(
+            "api/v1/documents/",
+            json=payload,
+            headers={"Authorization": f"Bearer {str(uuid.uuid4())}"},
+        )
 
         assert response.status_code == status.HTTP_400_BAD_REQUEST
         assert response.json()["detail"] == f"Internal user with id {fake_id} not found"
@@ -43,7 +57,11 @@ class TestDocumentRouter:
             "staff_id": str(staff.internal_id),
         }
 
-        response = client.post("api/v1/documents/", json=payload)
+        response = client.post(
+            "api/v1/documents/",
+            json=payload,
+            headers={"Authorization": f"Bearer {str(uuid.uuid4())}"},
+        )
 
         assert response.status_code == status.HTTP_201_CREATED
         mock_ocr_provider.process_document.assert_called()

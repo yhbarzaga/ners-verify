@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 
 from app import get_repository
+from app.api import verify
 from app.exceptions import ResourceNotFound
 from app.repositories import StaffRepository
 from app.services.staff_service import StaffService
@@ -8,7 +9,7 @@ from app.services.staff_service import StaffService
 router = APIRouter()
 
 
-@router.get("/staff/{staff_id}/refund")
+@router.get("/staff/{staff_id}/refund", dependencies=[Depends(verify)])
 def get_total_refund(
     staff_id: str,
     staff_repo=Depends(get_repository(StaffRepository)),
