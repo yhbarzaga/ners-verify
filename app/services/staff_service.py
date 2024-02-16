@@ -1,6 +1,6 @@
 import math
 
-from app.domain import StaffDomain
+from app.domain import StaffDomain, StaffCreateDomain
 from app.exceptions import ResourceNotFound
 from app.repositories import StaffRepository
 
@@ -33,3 +33,7 @@ class StaffService:
         staff = self.get_by_internal_id(internal_id)
         total = sum(document.total for document in staff.documents)
         return math.ceil(total)
+
+    def create(self, obj_in: StaffCreateDomain):
+        """Create a new user"""
+        return self.repo.create(obj_in)

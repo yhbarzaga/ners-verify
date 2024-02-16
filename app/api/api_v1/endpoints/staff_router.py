@@ -2,8 +2,10 @@ from fastapi import APIRouter, Depends, HTTPException, status
 
 from app import get_repository
 from app.api import verify
-from app.exceptions import ResourceNotFound
+from app.domain import StaffCreateDomain
+from app.exceptions import ResourceNotFound, CreationError
 from app.repositories import StaffRepository
+from app.schemas import StaffCreateSchema, StaffResponseSchema
 from app.services.staff_service import StaffService
 
 router = APIRouter()
@@ -21,4 +23,24 @@ def get_total_refund(
     except ResourceNotFound as err:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail=str(err)
+        ) from err
+
+
+@router.post(
+    "/staff",
+    status_code=status.HTTP_201_CREATED,
+    dependencies=[Depends(verify)],
+    response_model=StaffResponseSchema,
+)
+def create_staff(
+    payload: StaffCreateSchema,
+    staff_repo=Depends(get_repository(StaffRepository)),
+):
+    """Create a new member of the staff"""
+
+    try:
+        return StaffService(repo=staff_repo).create(StaffCreateDomain(**payload.dict()))
+    except CreationError as err:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail=str(err)
         ) from err
