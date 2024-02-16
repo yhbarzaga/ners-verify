@@ -72,7 +72,7 @@ jobs:
               run: poetry install --no-root
 
             - name: Run migrations
-              run: alembic upgrade head
+              run: PYTHONPATH=. alembic upgrade head
 
             - name: Test
               run: pytest
