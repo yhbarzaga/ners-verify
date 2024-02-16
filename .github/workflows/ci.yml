@@ -76,4 +76,4 @@ jobs:
                 VERIFY_USER_NAME: myUserName
 
             - name: Test
-              run: pytest
+              run: PYTHONPATH=. pytest
