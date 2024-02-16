@@ -12,11 +12,36 @@ jobs:
           matrix:
             python-version: ["3.9"]
 
+        services:
+          postgres:
+            image: docker.io/library/postgres:14
+            env:
+              POSTGRES_DB: nersdb_test
+              POSTGRES_PASSWORD: "1234"
+              POSTGRES_USER: app
+            # Set health checks to wait until postgres has started
+            options: >-
+              --health-cmd pg_isready
+              --health-interval 10s
+              --health-timeout 5s
+              --health-retries 5
+
         env:
             PROJECT_NAME: "NERS API"
             DOMAIN: localhost
             STACK_NAME: ners-api
             INSTALL_DEV: 'true'
+            POSTGRES_SERVER: db-test
+            POSTGRES_DB: nersdb_test
+            POSTGRES_USER: app
+            POSTGRES_PASSWORD: 1234
+            SQLALCHEMY_DATABASE_URI: postgresql://app:1234@db-test:5432/nersdb_test
+            SERVER_HOST: http://${DOMAIN?Variable not set}
+            VERIFY_API_KEY: myKey
+            VERIFY_BASE_URL: https://my.url
+            VERIFY_CLIENT_ID: myClientId
+            VERIFY_CLIENT_SECRET: myClientSecret
+            VERIFY_USER_NAME: myUserName
 
         steps:
             - name: Check Out VCS Repository
@@ -28,8 +53,18 @@ jobs:
                 SECRET_KEY=$(openssl rand -hex 32)
                 echo "SECRET_KEY=${SECRET_KEY}" >> .env
 
-            - name: Build the stack
-              run: docker-compose -f docker-compose.test.yml up -d --build
+            - name: Install dependency manager
+              run: |
+                curl -sSL https://install.python-poetry.org | POETRY_HOME=/opt/poetry python && \
+                cd /usr/local/bin && \
+                ln -s /opt/poetry/bin/poetry && \
+                poetry config virtualenvs.create false
+
+            - name: Install dependencies
+              run: poetry install --no-root
+
+            - name: Run migrations
+              run: alembic upgrade head
 
             - name: Test
-              run: docker-compose exec -T api pytest
+              run: pytest
