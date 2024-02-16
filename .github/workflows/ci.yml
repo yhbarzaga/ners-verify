@@ -18,7 +18,10 @@ jobs:
             env:
               POSTGRES_DB: nersdb_test
               POSTGRES_PASSWORD: 1234
-              POSTGRES_USER: app
+              POSTGRES_USER: postgres
+              POSTGRES_PORT: 5432
+            ports:
+              - 5432:5432
             # Set health checks to wait until postgres has started
             options: >-
               --health-cmd pg_isready
@@ -64,7 +67,7 @@ jobs:
                 POSTGRES_DB: nersdb_test
                 POSTGRES_USER: app
                 POSTGRES_PASSWORD: 1234
-                SQLALCHEMY_DATABASE_URI: postgresql://app:1234@localhost:5432/nersdb_test
+                SQLALCHEMY_DATABASE_URI: postgresql://postgres:1234@127.0.0.1:5432/nersdb_test
                 SERVER_HOST: http://${DOMAIN?Variable not set}
                 VERIFY_API_KEY: myKey
                 VERIFY_BASE_URL: https://my.url
