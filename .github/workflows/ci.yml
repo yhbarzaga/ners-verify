@@ -1,0 +1,35 @@
+# GitHub Actions Workflow for Continuous Integration and Continuous Delivery
+
+name: CI
+
+on:
+  push:
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        strategy:
+          matrix:
+            python-version: ["3.9"]
+
+        env:
+            PROJECT_NAME: "NERS API"
+            DOMAIN: localhost
+            STACK_NAME: ners-api
+            INSTALL_DEV: 'true'
+
+        steps:
+            - name: Check Out VCS Repository
+              uses: actions/checkout@v2
+
+            - name: Create .env file
+              run: |
+                touch .env
+                SECRET_KEY=$(openssl rand -hex 32)
+                echo "SECRET_KEY=${SECRET_KEY}" >> .env
+
+            - name: Build the stack
+              run: docker-compose -f docker-compose.yml -f docker-compose.test.yml up -d
+
+            - name: Test
+              run: docker-compose exec -T api pytest
