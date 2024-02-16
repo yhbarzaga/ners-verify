@@ -21,7 +21,7 @@ services:
       - POSTGRES_DB=nersdb_test
       - POSTGRES_USER=app
       - POSTGRES_PASSWORD=1234
-      - SQLALCHEMY_DATABASE_URI=postgresql://app:1234@db-test/nersdb_test
+      - SQLALCHEMY_DATABASE_URI=postgresql://app:1234@db-test:5432/nersdb_test
       - SERVER_HOST=http://${DOMAIN?Variable not set}
     depends_on:
       - db-test
@@ -29,7 +29,7 @@ services:
       context: .
       args:
         INSTALL_DEV: ${INSTALL_DEV-'true'}
-    command: sh -c "sleep 30 && pytest"
+    command: /start-reload.sh
 
 
 volumes:
