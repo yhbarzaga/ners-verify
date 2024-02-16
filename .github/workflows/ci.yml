@@ -31,11 +31,11 @@ jobs:
             DOMAIN: localhost
             STACK_NAME: ners-api
             INSTALL_DEV: 'true'
-            POSTGRES_SERVER: localhost
+            POSTGRES_SERVER: postgres
             POSTGRES_DB: nersdb_test
             POSTGRES_USER: postgres
             POSTGRES_PASSWORD: postgres
-            SQLALCHEMY_DATABASE_URI: postgresql://postgres:postgres@localhost:5432/nersdb_test
+            SQLALCHEMY_DATABASE_URI: postgresql://postgres:postgres@postgres:5432/nersdb_test
             SERVER_HOST: http://${DOMAIN?Variable not set}
             VERIFY_API_KEY: myKey
             VERIFY_BASE_URL: https://my.url
