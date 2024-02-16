@@ -31,11 +31,11 @@ jobs:
             DOMAIN: localhost
             STACK_NAME: ners-api
             INSTALL_DEV: 'true'
-            POSTGRES_SERVER: db-test
+            POSTGRES_SERVER: localhost
             POSTGRES_DB: nersdb_test
-            POSTGRES_USER: app
-            POSTGRES_PASSWORD: 1234
-            SQLALCHEMY_DATABASE_URI: postgresql://app:1234@db-test:5432/nersdb_test
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: postgres
+            SQLALCHEMY_DATABASE_URI: postgresql://postgres:postgres@localhost:5432/nersdb_test
             SERVER_HOST: http://${DOMAIN?Variable not set}
             VERIFY_API_KEY: myKey
             VERIFY_BASE_URL: https://my.url
@@ -52,6 +52,14 @@ jobs:
                 touch .env
                 SECRET_KEY=$(openssl rand -hex 32)
                 echo "SECRET_KEY=${SECRET_KEY}" >> .env
+
+            - name: Set up Python ${{ matrix.python-version }}
+              uses: actions/setup-python@v4
+              with:
+                python-version: '3.9'
+
+            - name: Install python dependencies
+              run: python -m pip install --upgrade pip setuptools wheel
 
             - name: Install dependency manager
               run: |
