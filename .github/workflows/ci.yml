@@ -29,7 +29,7 @@ jobs:
                 echo "SECRET_KEY=${SECRET_KEY}" >> .env
 
             - name: Build the stack
-              run: docker-compose -f docker-compose.test.yml up --build --abort-on-container-exit --exit-code-from api
+              run: docker-compose -f docker-compose.test.yml up --build --detach --abort-on-container-exit --exit-code-from api
 
             - name: Test
               run: docker-compose exec -T api pytest
