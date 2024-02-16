@@ -12,11 +12,8 @@ RUN curl -sSL https://install.python-poetry.org | POETRY_HOME=/opt/poetry python
     ln -s /opt/poetry/bin/poetry && \
     poetry config virtualenvs.create false
 
-# Copy poetry.lock* in case it doesn't exist in the repo
-COPY ./pyproject.toml ./poetry.lock* $app_home_slash
-
-# Copy entrypoint
-COPY ./prestart.sh $app_home_slash
+# Copy the current directory contents into the container at /app
+COPY . $app_home
 
 # Allow installing dev dependencies to run tests
 ARG INSTALL_DEV=false
@@ -24,3 +21,5 @@ RUN bash -c "if [ $INSTALL_DEV == 'true' ] ; then poetry install --no-root ; els
 
 COPY ./app "$app_home/app"
 ENV PYTHONPATH=$app_home
+
+CMD ["uvicorn", "app.main:app", "--proxy-headers", "--host", "0.0.0.0", "--port", "80"]

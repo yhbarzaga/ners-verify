@@ -1,0 +1,43 @@
+version: "3.8"
+services:
+
+  db-test:
+    container_name: ners-db-test
+    image: postgres:12
+    volumes:
+      - app-db-test-data:/var/lib/postgresql/data/pgdata
+    environment:
+      - POSTGRES_DB=nersdb_test
+      - POSTGRES_USER=app
+      - POSTGRES_PASSWORD=1234
+      - PGDATA=/var/lib/postgresql/data/pgdata
+
+  api:
+    container_name: ners-api-test
+    ports:
+      - "8888:8888"
+    volumes:
+      - ./:/app
+    environment:
+      - POSTGRES_SERVER=db-test
+      - POSTGRES_DB=nersdb_test
+      - POSTGRES_USER=app
+      - POSTGRES_PASSWORD=1234
+      - SQLALCHEMY_DATABASE_URI=postgresql://app:1234@db-test:5432/nersdb_test
+      - SERVER_HOST=http://${DOMAIN?Variable not set}
+      - VERIFY_API_KEY=myKey
+      - VERIFY_BASE_URL=https://my.url
+      - VERIFY_CLIENT_ID=myClientId
+      - VERIFY_CLIENT_SECRET=myClientSecret
+      - VERIFY_USER_NAME=myUserName
+    depends_on:
+      - db-test
+    build:
+      context: .
+      args:
+        INSTALL_DEV: ${INSTALL_DEV-'true'}
+    command: /start-reload.sh
+
+
+volumes:
+  app-db-test-data:
