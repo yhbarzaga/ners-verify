@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 
 from app import get_repository
+from app.api import verify
 from app.exceptions import ResourceNotFound
 from app.repositories import DocumentRepository, StaffRepository
 from app.schemas import DocumentCreateSchema
@@ -13,7 +14,9 @@ from app.services.staff_service import StaffService
 router = APIRouter()
 
 
-@router.post("/documents", status_code=status.HTTP_201_CREATED)
+@router.post(
+    "/documents", status_code=status.HTTP_201_CREATED, dependencies=[Depends(verify)]
+)
 def process_document(
     payload: DocumentCreateSchema,
     ocr_provider=Depends(get_ocr_provider),
