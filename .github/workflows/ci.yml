@@ -17,11 +17,6 @@ jobs:
             DOMAIN: localhost
             STACK_NAME: ners-api
             INSTALL_DEV: 'true'
-            TRAEFIK_PUBLIC_NETWORK: traefik-public
-            TRAEFIK_PUBLIC_NETWORK_IS_EXTERNAL: false
-            TRAEFIK_PUBLIC_TAG: ners-api
-            TRAEFIK_TAG: ners-api
-            DOCKER_IMAGE_BACKEND: ners-api
 
         steps:
             - name: Check Out VCS Repository
