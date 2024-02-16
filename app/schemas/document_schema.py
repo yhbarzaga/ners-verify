@@ -8,7 +8,3 @@ class DocumentCreateSchema(BaseModel):
     file_name: str
     country: str
     staff_id: str
-
-
-class DocumentUpdateSchema(BaseModel):
-    """Schema definition used to update documents from request"""
