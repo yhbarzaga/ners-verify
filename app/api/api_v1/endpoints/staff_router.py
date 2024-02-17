@@ -11,15 +11,15 @@ from app.services.staff_service import StaffService
 router = APIRouter()
 
 
-@router.get("/staff/{staff_id}/refund", dependencies=[Depends(verify)])
+@router.get("/staff/{internal_id}/refund", dependencies=[Depends(verify)])
 def get_total_refund(
-    staff_id: str,
+    internal_id: str,
     staff_repo=Depends(get_repository(StaffRepository)),
 ):
     """Get the total amount to be refund for the given staff"""
 
     try:
-        return StaffService(repo=staff_repo).get_total(staff_id)
+        return StaffService(repo=staff_repo).get_total(internal_id)
     except ResourceNotFound as err:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail=str(err)
@@ -36,7 +36,10 @@ def create_staff(
     payload: StaffCreateSchema,
     staff_repo=Depends(get_repository(StaffRepository)),
 ):
-    """Create a new member of the staff"""
+    """
+    Create a new member of the staff
+    Use uid value in response whenever required staff_id
+    """
 
     try:
         return StaffService(repo=staff_repo).create(StaffCreateDomain(**payload.dict()))
